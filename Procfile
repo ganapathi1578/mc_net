@@ -1,1 +1,1 @@
-web: gunicorn Society.wsgi:application
+web: gunicorn mc_net.wsgi:application
