@@ -1,0 +1,30 @@
+{% extends "accounts/base.html" %}
+{% block title %}Post Event{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2>Post new event</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="mb-3">
+        <label class="form-label">Title</label>
+        {{ form.title }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Details</label>
+        {{ form.body }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Image (optional)</label>
+        {{ form.image }}
+      </div>
+      <div class="mb-3 form-check">
+        {{ form.is_published }} <label class="form-check-label">Publish now</label>
+      </div>
+      <button class="btn btn-success" type="submit">Post</button>
+      <a class="btn btn-secondary" href="{% url 'events:list' %}">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

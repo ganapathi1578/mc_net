@@ -1,0 +1,36 @@
+{% extends "accounts/base.html" %}
+{% block title %}Edit Event{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2>Edit Event</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="mb-3">
+        <label class="form-label">Title</label>
+        {{ form.title }}
+        {{ form.title.errors }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Details</label>
+        {{ form.body }}
+        {{ form.body.errors }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Image (optional)</label><br>
+        {% if event.image %}
+          <img src="{{ event.image.url }}" style="max-width:200px; display:block; margin-bottom:8px;">
+        {% endif %}
+        {{ form.image }}
+        {{ form.image.errors }}
+      </div>
+      <div class="mb-3 form-check">
+        {{ form.is_published }} <label class="form-check-label">Published</label>
+      </div>
+      <button class="btn btn-success" type="submit">Save changes</button>
+      <a class="btn btn-secondary" href="{% url 'events:detail' event.pk %}">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

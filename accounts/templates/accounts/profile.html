@@ -1,0 +1,59 @@
+{% extends "accounts/base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-10">
+    <div class="card mb-4">
+      <div class="card-body d-flex gap-4 align-items-center">
+        <!-- Avatar -->
+        <div class="avatar-wrapper text-center" style="min-width:140px;">
+          {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}" alt="avatar"
+                 class="rounded-circle border" style="width:120px; height:120px; object-fit:cover;">
+          {% else %}
+            <!-- fallback: initials in a circle -->
+            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
+                 style="width:120px; height:120px; font-size:40px;">
+              {{ profile.user.name|default:"U"|slice:":1"|upper }}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Basic info -->
+        <div class="flex-grow-1">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h3 class="mb-1">{{ profile.user.name }}</h3>
+              <p class="mb-1 text-muted">{{ profile.user.email }}</p>
+              <p class="mb-0"><small class="text-muted">Joined: {{ profile.user.date_joined|date:"F j, Y" }}</small></p>
+            </div>
+
+            <div class="text-end">
+              <a class="btn btn-outline-primary btn-sm mb-2" href="{% url 'accounts:edit_profile' %}">Edit Profile</a>
+              <a class="btn btn-outline-danger btn-sm mb-2" href="{% url 'accounts:logout' %}">Logout</a>
+              <!-- optional: change-password, enable if url configured -->
+              <a class="btn btn-outline-secondary btn-sm mb-2" href="{% url 'accounts:password_change' %}">Change password</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- About / Bio -->
+    <div class="card">
+      <div class="card-header">
+        About
+      </div>
+      <div class="card-body">
+        {% if profile.bio %}
+          <p>{{ profile.bio|linebreaks }}</p>
+        {% else %}
+          <p class="text-muted">No bio yet. You can add one in Edit Profile.</p>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

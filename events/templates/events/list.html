@@ -1,0 +1,63 @@
+{% extends "accounts/base.html" %}
+{% block title %}Events - Mathematics And Computing Society{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Events</h2>
+  {% if request.user.is_authenticated %}
+    <a class="btn btn-primary" href="{% url 'events:create' %}">Post Event</a>
+  {% else %}
+    <a class="btn btn-outline-secondary" href="{% url 'accounts:login' %}">Login to post</a>
+  {% endif %}
+</div>
+
+<div class="row">   
+  {% for event in page.object_list %}
+  <div class="col-md-6 mb-4">
+    <div class="card h-100">
+      {% if event.image %}
+      <img src="{{ event.image.url }}" class="card-img-top" style="height:220px; object-fit:cover;">
+      {% endif %}
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title">{{ event.title }}</h5>
+        <p class="card-text text-muted small mb-2">
+          By {{ event.author.name }} • {{ event.created_at|date:"F j, Y, g:i a" }}
+        </p>
+        <p class="card-text" style="flex:1">{{ event.body|truncatechars:180 }}</p>
+        <div class="mt-2 d-flex justify-content-between align-items-center">
+          <a href="{% url 'events:detail' event.pk %}" class="btn btn-sm btn-outline-primary">Read more</a>
+          
+          {% if request.user == event.author %}
+            <div>
+              <a href="{% url 'events:edit' event.pk %}" class="btn btn-sm btn-warning">Edit</a>
+              <a href="{% url 'events:delete' event.pk %}" class="btn btn-sm btn-danger">Delete</a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+    <div class="col-12"><p class="text-muted">No events yet.</p></div>
+  {% endfor %}
+</div>
+
+<!-- pagination -->
+<nav aria-label="Page navigation">
+  <ul class="pagination">
+    {% if page.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">Previous</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+
+    <li class="page-item disabled"><span class="page-link">Page {{ page.number }} of {{ page.paginator.num_pages }}</span></li>
+
+    {% if page.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}">Next</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+    {% endif %}
+  </ul>
+</nav>
+
+{% endblock %}
